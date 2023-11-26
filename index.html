@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+     <script>
+          new Image().src = `./star-pink.svg`
+          const star = () => {
+               const el = document.createElement("div")
+               el.className = "star"
+               document.body.append(el)
+               return el
+          }
+
+          const light = () => {
+               const el = document.createElement("div")
+               el.className = "decay-light"
+               document.body.append(el)
+               return el
+          }
+
+          function pythagorean(pos1, pos2) {
+               return Math.sqrt(Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2))
+          }
+
+          let lastPos = [-100, -100]
+          window.addEventListener("mousemove", (ev) => {
+               const pos = [ev.clientX, ev.clientY]
+               
+               if (pythagorean(lastPos, pos) < 50) return
+
+               lastPos = pos
+
+               const el = star()
+               el.style.left = `${pos[0]}px`
+               el.style.top = `${pos[1]}px`
+               el.style.rotate = `${Math.random() * 120 - 60}deg`
+
+               const size = Math.random() * 12
+               el.style.width = el.style.height = `${size + 24}px`
+
+               if (Math.random() > .5) {
+                    el.style.backgroundImage = `url(/star-pink.svg)`
+                    el.style.filter = `drop-shadow(0px 0px 40px #ffc4e9)`
+               }
+
+               setTimeout(() => el.remove(), 800)
+
+          })
+
+          window.addEventListener("mousemove", (ev) => {
+               const el = light()
+               el.style.left = `${ev.clientX}px`
+               el.style.top = `${ev.clientY}px`
+
+               setTimeout(() => el.remove(), 400)
+          })
+     </script>
+</body>
+<style>
+     body, html {
+          margin: 0;
+          background: linear-gradient(90deg, rgba(109,0,157,1) 0%, rgba(71,0,167,1) 100%);
+          height: 100vh;
+          width: 100vw;
+          overflow: hidden;
+     }
+
+     .decay-light {
+          height: 32px;
+          width: 32px;
+          box-shadow: 0px 0px 40px #ff4df0b0;
+          background: #ff4df0b0;
+          border-radius: 50%;
+          position: absolute;
+          filter: blur(15px);
+          animation: decay .4s ease-out;
+          animation-fill-mode: forwards;
+     }
+
+     @keyframes decay {
+          from {
+               opacity: 1;
+          }
+
+          to {
+               opacity: 0;
+          }
+     }
+
+     .star {
+          height: 32px;
+          width: 32px;
+          position: absolute;
+          background: url(./star.svg);
+          background-repeat: no-repeat;
+          background-size: contain;
+          filter: drop-shadow(0px 0px 20px #fff);
+          animation: fall .8s ease-out;
+          animation-fill-mode: forwards;
+          z-index: 99;
+     }
+
+     @keyframes fall {
+          from {
+               transform: translateY(0) skew(10deg);
+          }
+
+          20% {
+               transform: translateY(-30px);
+               opacity: 1;
+          }
+
+          to {
+               transform: translateY(50px) skew(-45deg) scaleY(.1);
+               opacity: 0;
+          }
+     }
+</style>
+</html>
